@@ -1,0 +1,24 @@
+{
+ "text": "{\"reason\": \"Відповідь правильно наводить загальне правило (ст. 40 КЗпП забороняє звільнення під час тимчасової непрацездатності, окрім п. 5 і повної ліквідації), але не згадує винятку на період воєнного стану за ст. 5 Закону № 2136-IX, коли звільнення можливе з датою першого робочого дня після лікарняного. Еталон прямо вимагає назвати обидва пункти, тож головний факт про воєнний стан відсутній. До того ж відповідь відкидає позицію Мінекономіки, яка частково узгоджується з винятком воєнного часу, і пише про «вказаний п. 5» як про щось невизначене.\", \"pass\": false}",
+ "model": "anthropic/claude-sonnet-5.5",
+ "input_tokens": 853,
+ "output_tokens": 247,
+ "latency_s": 2.98,
+ "finish_reason": "stop",
+ "request": {
+  "model": "anthropic/claude-sonnet-5.5",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Ти — суворий оцінювач відповідей HR-асистента. Порівняй відповідь системи з еталонною відповіддю на те саме питання.\n\nВідповідь проходить (pass = true), якщо:\n- вона містить головний факт еталона (число, строк, так/ні, хто погоджує тощо);\n- у ній немає фактів, що суперечать еталону;\n- якщо еталон каже, що передумова питання хибна або застаріла, відповідь це виправляє, а не погоджується з передумовою.\n\nНе впливає на оцінку:\n- мова відповіді, стиль, порядок, посилання у квадратних дужках;\n- додаткові правильні подробиці, яких немає в еталоні;\n- відсутність другорядних деталей еталона (винятки, суміжні норми), якщо головний факт правильний.\n\nВідповідь не проходить (pass = false), якщо головний факт хибний або відсутній, якщо вона застаріла (наприклад, бере норму зі старої версії документа як чинну), або якщо система відповіла «не знаю», хоча еталон містить відповідь.\n\nПоверни лише JSON: {\"reason\": \"одне-два речення\", \"pass\": true | false}"
+   },
+   {
+    "role": "user",
+    "content": "Питання: Can an employer dismiss an employee while the employee is on sick leave?\n\nЕталонна відповідь: General rule — no: Article 40 of the Labour Code prohibits dismissal on the employer's initiative during temporary incapacity for work (except paragraph 5 of Article 40 and full liquidation). But during martial law Article 5 of Law No. 2136-IX allows it, with the dismissal date set to the first working day after the sick leave ends. A complete answer names both.\n\nВідповідь системи: No, not on the employer's initiative: Article 40 of the Labour Code prohibits dismissal at the employer's initiative during temporary incapacity, with the exception of dismissal under clause 5 (for example, liquidation or staff reduction... note: clause 5 is not specified in the excerpt) and the full liquidation of the enterprise [2][4]. Dismissal of an employee on their own initiative (resignation) is not prohibited during sick leave [1][3]. The source [8] describes a Ministry of Economy position that dismissal on lawful grounds under Articles 40 and 41 is permitted during sick leave, but this contradicts the current text of Article 40 and the ILO Convention No. 158, which states that temporary absence due to illness is not a lawful ground for dismissal [7], so the Labour Code text should be followed [2][4]."
+   }
+  ],
+  "temperature": 0.0,
+  "max_tokens": 900,
+  "json_mode": true
+ }
+}

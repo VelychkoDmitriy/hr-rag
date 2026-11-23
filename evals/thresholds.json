@@ -1,0 +1,14 @@
+{
+  "_comment": "CI fails if a metric of the current pipeline (python main.py eval --check) crosses its threshold. Set just below v4 on 2026-11-23 (33 questions: one question = 3 points of accuracy), so any real regression fails the build.",
+  "answer_accuracy": {"min": 0.84},
+  "no_answer_accuracy": {"min": 1.0},
+  "false_unknown_rate": {"max": 0.12},
+  "key_facts": {"min": 0.88},
+  "cited_rate": {"min": 1.0},
+  "citation_coverage": {"min": 0.9},
+  "invalid_citations": {"max": 0},
+  "source_hit": {"min": 0.9},
+  "outdated_cited": {"max": 0},
+  "faithfulness": {"min": 0.85},
+  "cost_per_1000_questions_usd": {"max": 1.0}
+}

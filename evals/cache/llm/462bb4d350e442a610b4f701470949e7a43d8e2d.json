@@ -1,0 +1,25 @@
+{
+ "text": "Старий Employee Handbook V1 передбачав 24 календарні дні щорічної відпустки [1]. Цей документ має позначку «НЕЧИННА, застаріла версія» (версія 2024-01-15), тому його норма більше не діє, а чинне правило в наданих джерелах не наведено [1][2].",
+ "model": "anthropic/claude-haiku-5.5",
+ "input_tokens": 1311,
+ "output_tokens": 110,
+ "latency_s": 1.38,
+ "finish_reason": "stop",
+ "request": {
+  "model": "anthropic/claude-haiku-5.5",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Ти — HR-асистент. Відповідаєш рекрутеру чи HR-фахівцю лише на основі наданих джерел: законодавство України, роз'яснення органів влади та внутрішні документи вигаданої компанії Polaris Demo LLC.\n\nЯк відповідати:\n1. Перше речення — пряма відповідь на питання (число, строк, так/ні, хто погоджує). Далі — умови й винятки, якщо вони важливі. До 5 речень.\n2. Кожне речення з фактом закінчуй посиланням на джерело у квадратних дужках: [2] або [1][3]. Посилайся на те джерело, де цей факт справді написаний.\n3. Використовуй тільки інформацію з джерел. Не додавай знань ззовні, навіть якщо впевнений.\n4. Якщо в питанні є число чи поріг, застосуй правило з джерела саме до нього і перевір: наприклад, 8 000 грн — це «понад 5 000 грн».\n5. Зверни увагу, про кого питання: працівник чи роботодавець, компанія чи закон, конкретний відділ чи всі. Не підміняй норму для однієї сторони нормою для іншої. Якщо закон і політика компанії дають різні правила, назви обидва й скажи, чиє яке.\n6. Якщо питання містить хибне чи застаріле припущення (інше число, неіснуючу виплату, дозвіл, якого немає), не погоджуйся з ним: прямо скажи, що в документах інакше, і наведи чинне правило з посиланням.\n7. Джерело з позначкою «НЕЧИННА, застаріла версія» використовуй, лише коли питають саме про стару версію; тоді скажи, що вона застаріла, і, якщо є, наведи чинне правило.\n8. Якщо джерела не відповідають на питання навіть частково, почни відповідь словами «Не знаю: у документах немає відповіді на це питання.» і одним реченням скажи, що в документах є близького. Якщо ти вже дав відповідь або виправив припущення з питання, фразу «Не знаю» не додавай.\n\nВідповідай мовою питання."
+   },
+   {
+    "role": "user",
+    "content": "Джерела:\n\n[1] Employee Handbook V1 — 4. Annual leave (версія 2024-01-15, НЕЧИННА, застаріла версія)\nEvery employee is entitled to annual paid leave of 24 calendar days. Leave is planned in the leave schedule, which each department submits to HR by 15 December for the next year. At least one part of the leave must last no less than 14 calendar days.\n\nUnused leave is not paid out while the employee keeps working, except in the cases allowed by the Law of Ukraine On Leave. On dismissal, all unused days are compensated.\n\n[2] Employee Handbook V1 — 1. About this handbook (версія 2024-01-15, НЕЧИННА, застаріла версія)\nEffective 2024-01-15.\n\nFictional company. Course project document, not legal advice.\n\n## 1. About this handbook\n\nThis handbook explains the main rules of working at Polaris Demo LLC: working time, leave, remote work, equipment and conduct. Where the handbook and the Labour Code of Ukraine differ, the Labour Code applies. Questions go to the HR team at hr@polaris-demo.example.\n\n[3] Employee Handbook V1 — 5. Remote work (версія 2024-01-15, НЕЧИННА, застаріла версія)\nAfter probation, employees may work remotely up to two days per week. Remote days are agreed with the team lead in the HR portal at least one working day in advance. Warehouse and office-administration roles work on site.\n\nFor a home workplace, the company pays a one-time allowance of 3,000 UAH for a chair, monitor or headset, against receipts.\n\nПитання: Скільки днів щорічної відпустки передбачав старий Employee Handbook V1?"
+   }
+  ],
+  "temperature": 0.0,
+  "max_tokens": 1000,
+  "json_mode": false,
+  "reasoning": false
+ }
+}

@@ -1,5 +1,6 @@
+# corpus and ingestion (step 1)
 requests==2.34.2
-PyYAML==6.0.3
+PyYAML==6.0.4
 beautifulsoup4==4.15.0
 charset-normalizer==3.5.3
 python-docx==1.2.0
@@ -7,3 +8,13 @@ pymupdf==2.1
 pymupdf4llm==2.1
 tiktoken==0.14.0
 fpdf2==2.9.0
+# index and search (step 2): local ONNX embeddings + reranker, in-memory Qdrant, BM25 over Ukrainian lemmas
+fastembed==0.9.1
+qdrant-client==1.20.0
+rank-bm25==0.2.2
+pymorphy3==2.0.6
+pymorphy3-dicts-uk==2.4.1.1.1663094765
+numpy==2.5.5
+# answers and judges (steps 3-4) through OpenRouter
+openai==3.57.0
+python-dotenv==1.2.4
