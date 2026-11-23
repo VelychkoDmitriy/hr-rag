@@ -2,13 +2,13 @@
 
 | configuration | recall@1 | recall@5 | recall@10 | MRR@10 | outdated chunk at top-1 | ms / query | missed in top-5 |
 |---|---|---|---|---|---|---|---|
-| fixed chunks, vector | 0.73 | 0.87 | 1.00 | 0.785 | 0 | 26 | r05, r15 |
-| vector | 0.67 | 0.93 | 1.00 | 0.794 | 2 | 23 | r05 |
-| BM25 | 0.53 | 0.73 | 0.80 | 0.628 | 1 | 10 | r01, r03, r05, r13 |
-| hybrid (RRF) | 0.73 | 0.87 | 1.00 | 0.814 | 2 | 43 | r05, r13 |
-| hybrid + rerank | 0.80 | 0.93 | 1.00 | 0.878 | 2 | 35 | r05 |
-| hybrid + rerank, current versions only | 0.93 | 1.00 | 1.00 | 0.950 | 0 | 102 | — |
-| + query rewrite (uk + en), current only | 0.93 | 1.00 | 1.00 | 0.950 | 0 | 393 | — |
+| fixed chunks, vector | 0.73 | 0.87 | 1.00 | 0.785 | 0 | 24 | r05, r15 |
+| vector | 0.67 | 0.93 | 1.00 | 0.794 | 2 | 25 | r05 |
+| BM25 | 0.53 | 0.73 | 0.80 | 0.628 | 1 | 6 | r01, r03, r05, r13 |
+| hybrid (RRF) | 0.73 | 0.87 | 1.00 | 0.814 | 2 | 33 | r05, r13 |
+| hybrid + rerank | 0.80 | 0.93 | 1.00 | 0.878 | 2 | 33 | r05 |
+| hybrid + rerank, current versions only | 0.93 | 1.00 | 1.00 | 0.950 | 0 | 78 | — |
+| + query rewrite (uk + en), current only | 0.93 | 1.00 | 1.00 | 0.950 | 0 | 349 | — |
 
 Ranks of the first correct chunk per question:
 

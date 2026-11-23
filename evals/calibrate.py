@@ -9,7 +9,7 @@ Writes evals/results/calibration.json and calibration.md.
 import csv
 import json
 
-from .search import ROOT
+from src.hr_rag.search import ROOT
 
 RESULTS = ROOT / "evals" / "results"
 SHEET = ROOT / "evals" / "human_labels.csv"

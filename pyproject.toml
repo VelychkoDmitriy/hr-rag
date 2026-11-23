@@ -1,0 +1,18 @@
+[project]
+name = "hr-rag"
+version = "0.5.0"
+description = "HR assistant: RAG over Ukrainian labour law and HR policies of a fictional company, with evals in CI"
+readme = "README.md"
+# the task asks for Python 3.10+; the pinned numpy 2.5 needs 3.12 (pymupdf 2.1 and onnxruntime need 3.11)
+requires-python = ">=3.12"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["src*", "evals*"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"

@@ -9,7 +9,7 @@ import json
 import time
 from pathlib import Path
 
-from .search import ROOT, Index
+from src.hr_rag.search import ROOT, Index
 
 SET = ROOT / "evals" / "retrieval_set.jsonl"
 RESULTS = ROOT / "evals" / "results"
@@ -36,7 +36,7 @@ def lint(items: list[dict], idx: Index) -> list[str]:
 
 def multi_query(question: str, filters: dict | None) -> list:
     """The RAG v3 retrieval: question + LLM rewrites (uk legal terms, en), reranked against the question."""
-    from . import rag
+    from src.hr_rag import rag
     extra, _ = rag.rewrite(question)
     return rag.index().multi_query(question, extra, K, filters)
 

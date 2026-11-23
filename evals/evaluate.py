@@ -11,8 +11,9 @@ import statistics
 import sys
 from pathlib import Path
 
-from . import rag, scorers
-from .search import ROOT
+from evals import scorers
+from src.hr_rag import rag
+from src.hr_rag.search import ROOT
 
 TESTSET = ROOT / "evals" / "testset.jsonl"
 RESULTS = ROOT / "evals" / "results"

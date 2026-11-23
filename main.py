@@ -37,7 +37,8 @@ def main() -> None:
     sub.add_parser("calibrate", help="agreement of the LLM judge with the human labels")
     args = ap.parse_args()
     if args.cmd == "all":
-        from src.hr_rag import evaluate, ingest, rag, retrieval_eval
+        from evals import evaluate, retrieval_eval
+        from src.hr_rag import ingest, rag
         ingest.print_summary(ingest.run())
         retrieval_eval.run()                       # builds both indexes (embeddings come from the cache)
         evaluate.main(rag.DEFAULT, "all", True, True)
@@ -48,16 +49,16 @@ def main() -> None:
     if args.cmd == "ask":
         print(rag.render(rag.answer(args.question, args.version)))
     elif args.cmd == "eval":
-        from src.hr_rag import evaluate
+        from evals import evaluate
         evaluate.main(args.version, args.split, not args.no_judge, args.check)
     elif args.cmd == "label-sheet":
-        from src.hr_rag import calibrate
+        from evals import calibrate
         calibrate.write_sheet()
     elif args.cmd == "calibrate":
-        from src.hr_rag import calibrate
+        from evals import calibrate
         calibrate.run()
     elif args.cmd == "eval-retrieval":
-        from src.hr_rag import retrieval_eval
+        from evals import retrieval_eval
         retrieval_eval.run()
     elif args.cmd == "ingest":
         from src.hr_rag import ingest

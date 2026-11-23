@@ -15,8 +15,8 @@ LLM judges (anthropic/claude-sonnet-5.5, a different and stronger model than the
 import json
 import re
 
-from . import llm
-from .rag import Answer, citations, format_sources, load_prompt
+from src.hr_rag import llm
+from src.hr_rag.rag import Answer, citations, format_sources, load_prompt
 
 SENT_RE = re.compile(r"(?<=[.!?…])\s+|\n+")
 OUTDATED_OK = {"outdated_explicit", "false_premise"}       # citing the old version is part of a good answer here

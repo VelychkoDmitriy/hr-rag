@@ -14,7 +14,7 @@
 Пошук: hybrid + rerank + фільтр метаданих — MRR 0.95 проти 0.79 у vector-only. Метрики, порівняння версій і розбір помилок — **[REPORT.md](REPORT.md)**.
 
 ```bash
-python main.py all        # увесь пайплайн однією командою: ingest -> index -> eval пошуку -> eval відповідей з порогами
+make run                  # або python main.py all: ingest -> index -> eval пошуку -> eval відповідей з порогами
 python main.py ask "Скільки днів відпустки має Senior Developer?"
 ```
 
@@ -178,16 +178,17 @@ data/sources.yaml         реєстр документів (URL, редакці
 data/raw/                 завантажені й згенеровані документи + sources.jsonl з хешами
 data/processed/           chunks.jsonl, manifest.json, chunking_report.md (результат ingestion)
 data/index/               кеш embeddings, векторів запитів і rerank-скорів
-src/hr_rag/               ingest, search, rag, llm, scorers, evaluate, retrieval_eval, calibrate
+src/hr_rag/               ingest, search (індекс і hybrid), rag (відповідь з джерелами), llm (OpenRouter + кеш)
 prompts/                  промпти відповіді, переформулювання, суддів + CHANGELOG.md
-evals/                    testset, retrieval_set, thresholds, human_labels.csv, cache/ (LLM), results/
+evals/                    testset, retrieval_set, scoring-функції (scorers.py), прогін (evaluate.py, retrieval_eval.py),
+                          калібрування судді (calibrate.py, human_labels.csv), thresholds, cache/ (LLM), results/
 scripts/                  завантаження корпусу і генерація документів компанії
 REPORT.md                 метрики, порівняння версій, розбір помилок
 ```
 
 ## Встановлення
 
-Потрібен Python 3.10+.
+Потрібен **Python 3.12+**: ТЗ вимагає 3.10+, а закріплена numpy 2.5 працює з 3.12 (pymupdf 2.1 і onnxruntime — з 3.11). Перевірено на 3.12.10, CI — 3.12.
 
 ```bash
 python -m venv .venv
@@ -195,5 +196,7 @@ python -m venv .venv
 pip install -r requirements.txt
 copy .env.example .env          # Linux/macOS: cp .env.example .env, далі вписати OPENROUTER_API_KEY
 ```
+
+Команди: `make run` (увесь пайплайн), `make check` (те, що запускає CI), `make ask Q="..."`, `make corpus` (перезавантажити корпус). На Windows без make — `python main.py all` тощо.
 
 Без ключа працює все, що є в кеші (`set HR_RAG_OFFLINE=1`, як у CI). Ключ потрібен лише для нових питань і нових версій промпта. Перша побудова індексу завантажує моделі (~2.5 ГБ) і рахує embeddings ~85 хв на CPU; з кешем у репозиторії — секунди.
