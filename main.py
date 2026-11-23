@@ -39,7 +39,12 @@ def main() -> None:
     if args.cmd == "all":
         from evals import evaluate, retrieval_eval
         from src.hr_rag import ingest, rag
-        ingest.print_summary(ingest.run())
+        missing = [d.id for d in ingest.load_registry() if not d.path.exists()]
+        if missing:   # a fresh clone has no hand-downloaded ILO PDFs (not redistributed): keep the committed chunks
+            print(f"ingest skipped: {len(missing)} source file(s) not in data/raw ({', '.join(missing)}); "
+                  "using the committed data/processed/ (see README, «Корпус»)")
+        else:
+            ingest.print_summary(ingest.run())
         retrieval_eval.run()                       # builds both indexes (embeddings come from the cache)
         evaluate.main(rag.DEFAULT, "all", True, True)
         return

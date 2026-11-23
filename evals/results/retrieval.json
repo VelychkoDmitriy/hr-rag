@@ -8,7 +8,7 @@
       "recall@10": 1.0,
       "mrr@10": 0.785,
       "outdated_top1": 0,
-      "ms_per_query": 24,
+      "ms_per_query": 21,
       "missed@5": [
         "r05",
         "r15"
@@ -65,7 +65,7 @@
       "recall@10": 0.8,
       "mrr@10": 0.628,
       "outdated_top1": 1,
-      "ms_per_query": 6,
+      "ms_per_query": 7,
       "missed@5": [
         "r01",
         "r03",
@@ -96,7 +96,7 @@
       "recall@10": 1.0,
       "mrr@10": 0.814,
       "outdated_top1": 2,
-      "ms_per_query": 33,
+      "ms_per_query": 32,
       "missed@5": [
         "r05",
         "r13"
@@ -125,7 +125,7 @@
       "recall@10": 1.0,
       "mrr@10": 0.878,
       "outdated_top1": 2,
-      "ms_per_query": 33,
+      "ms_per_query": 34,
       "missed@5": [
         "r05"
       ],
@@ -179,7 +179,7 @@
       "recall@10": 1.0,
       "mrr@10": 0.95,
       "outdated_top1": 0,
-      "ms_per_query": 349,
+      "ms_per_query": 340,
       "missed@5": [],
       "ranks": {
         "r01": 1,

@@ -48,7 +48,7 @@ python scripts/fetch_corpus.py        # завантажує реальні до
 python scripts/make_company_docs.py   # генерує документи компанії
 ```
 
-Два PDF МОП (Cloudflare блокує скрипти) треба один раз завантажити вручну в `data/manual/` за посиланнями з `data/sources.yaml`. Без них пайплайн працює: документ позначається як відсутній.
+Два PDF МОП (Cloudflare блокує скрипти) треба один раз завантажити вручну в `data/manual/` за посиланнями з `data/sources.yaml`. Вони потрібні лише для повторного ingestion. `make run` на свіжому клоні пропускає ingestion, якщо якогось джерела немає, і бере закомічений `data/processed/`, тож результати збігаються з REPORT.
 
 ## Ingestion
 
