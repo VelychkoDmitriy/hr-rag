@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+# unofficial ILO translations downloaded by hand: not redistributed, see README
+data/manual/
+data/raw/manual/
+data/*.log
+data/raw/*.log
+.cache/
