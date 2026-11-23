@@ -9,7 +9,7 @@
 - кожна відповідь з посиланням на документ і розділ;
 - **$0.30 за 1 000 питань.**
 
-Суддю ще не відкалібровано людиною, див. REPORT.
+LLM-суддю відкалібровано на 15 ручних мітках: 80% згоди наосліп (суддя суворіший за людину, хибних «pass» 0), після розбору — 100%.
 
 Пошук: hybrid + rerank + фільтр метаданих — MRR 0.95 проти 0.79 у vector-only. Метрики, порівняння версій і розбір помилок — **[REPORT.md](REPORT.md)**.
 
@@ -168,7 +168,7 @@ $ python main.py ask "Хто має погодити курс вартістю 8
 - [evals/testset.jsonl](evals/testset.jsonl) — 53 питання з еталонами і джерелами: dev 17, test 16 і holdout 20 (перевірений людиною, для фінальної оцінки). Серед них 9 без відповіді в корпусі, 6 з хибною передумовою, застарілі версії, таблиці, крос-мовні, закон проти політики компанії.
 - Детерміновані скорери: правильне «не знаю», ключові факти, посилання в кожному реченні, процитовано очікуване джерело, застаріла версія.
 - LLM-судді (`anthropic/claude-sonnet-5.5`, інша модель, ніж модель відповіді): correctness проти еталона і faithfulness за джерелами.
-- Калібрування судді — за ручною розміткою [evals/human_labels.csv](evals/human_labels.csv) (`python main.py calibrate`).
+- Калібрування судді — 15 ручних міток у [evals/human_labels.csv](evals/human_labels.csv), `python main.py calibrate` → [evals/results/calibration.md](evals/results/calibration.md).
 - **CI** ([.github/workflows/eval.yml](.github/workflows/eval.yml)): на кожен push — eval з порогами [evals/thresholds.json](evals/thresholds.json). Ключ API не потрібен: закомічено кеш embeddings, rerank-скорів і відповідей LLM.
 
 ## Структура

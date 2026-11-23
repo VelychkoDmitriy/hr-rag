@@ -1,0 +1,37 @@
+{
+  "blind_labels": {
+    "v1:t02": 1,
+    "v1:t18": 0,
+    "v1:t05": 1,
+    "v5:t07": 1,
+    "v5:t04": 1,
+    "v5:t05": 1,
+    "v1:t13": 1,
+    "v5:h08": 1,
+    "v5:h06": 1,
+    "v5:h11": 1,
+    "v5:f01": 1,
+    "v1:t15": 1,
+    "v1:t16": 1,
+    "v1:t07": 1,
+    "v1:t23": 1
+  },
+  "final_labels": {
+    "v1:t02": 1,
+    "v1:t18": 0,
+    "v1:t05": 1,
+    "v5:t07": 1,
+    "v5:t04": 1,
+    "v5:t05": 1,
+    "v1:t13": 1,
+    "v5:h08": 1,
+    "v5:h06": 1,
+    "v5:h11": 1,
+    "v5:f01": 1,
+    "v1:t15": 1,
+    "v1:t16": 0,
+    "v1:t07": 0,
+    "v1:t23": 0
+  },
+  "note": "blind = first pass without seeing the judge; final = after discussing the 3 disagreements"
+}

@@ -1,0 +1,12 @@
+{
+  "labelled": 15,
+  "agreement": 1.0,
+  "cohen_kappa": 1.0,
+  "confusion": {
+    "both_pass": 11,
+    "both_fail": 4,
+    "judge_pass_human_fail": 0,
+    "judge_fail_human_pass": 0
+  },
+  "disagreements": []
+}
