@@ -19,8 +19,12 @@ BASE_URL = "https://openrouter.ai/api/v1"
 MODELS = {
     "anthropic/claude-haiku-5.5": {"input": 0.10, "output": 0.50},     # answers
     "anthropic/claude-sonnet-5.5": {"input": 2.00, "output": 10.00},   # judge: a different, stronger model
+    # generator candidates compared on the eval (REPORT.md, "Вибір моделі")
+    "openai/gpt-6-luna": {"input": 0.10, "output": 0.50},
+    "deepseek/deepseek-v4.1-flash": {"input": 0.05, "output": 0.199},
+    "mistralai/mistral-large-4-0": {"input": 0.70, "output": 2.10},
 }
-GENERATOR = "anthropic/claude-haiku-5.5"
+GENERATOR = "anthropic/claude-haiku-5.5"     # query rewrite; the answer model is set per pipeline in rag.py
 JUDGE = "anthropic/claude-sonnet-5.5"
 
 
@@ -82,16 +86,32 @@ def complete(messages: list[dict], model: str = GENERATOR, temperature: float = 
         try:
             resp = client().chat.completions.create(**kwargs)
             break
+        except openai.BadRequestError as e:
+            if "reasoning" in str(e).lower() and "extra_body" in kwargs:   # model cannot turn reasoning off
+                kwargs.pop("extra_body")
+                kwargs["max_tokens"] = max(max_tokens, 4000)
+                continue
+            raise
         except (openai.APITimeoutError, openai.APIConnectionError, openai.RateLimitError, openai.InternalServerError):
             if attempt == 4:
                 raise
             time.sleep(2 ** attempt)
     u = resp.usage
+    in_tok, out_tok = (u.prompt_tokens, u.completion_tokens) if u else (0, 0)
     finish = resp.choices[0].finish_reason
-    out = LLMResponse(resp.choices[0].message.content or "", model, u.prompt_tokens if u else 0,
-                      u.completion_tokens if u else 0, round(time.perf_counter() - t0, 2), False)
+    text = resp.choices[0].message.content or ""
+    retried = False
+    if not text.strip() and finish == "length":
+        # the whole budget went into hidden reasoning (Haiku 5.5 in v1, DeepSeek in v5): one retry with 3x tokens,
+        # both calls are paid and counted
+        kwargs["max_tokens"] = kwargs["max_tokens"] * 3
+        resp = client().chat.completions.create(**kwargs)
+        u = resp.usage
+        in_tok, out_tok = in_tok + (u.prompt_tokens if u else 0), out_tok + (u.completion_tokens if u else 0)
+        finish, text, retried = resp.choices[0].finish_reason, resp.choices[0].message.content or "", True
+    out = LLMResponse(text, model, in_tok, out_tok, round(time.perf_counter() - t0, 2), False)
     CACHE.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"text": out.text, "model": model, "input_tokens": out.input_tokens,
                                 "output_tokens": out.output_tokens, "latency_s": out.latency_s, "finish_reason": finish,
-                                "request": params}, ensure_ascii=False, indent=1), encoding="utf-8")
+                                "retried_empty": retried, "request": params}, ensure_ascii=False, indent=1), encoding="utf-8")
     return out

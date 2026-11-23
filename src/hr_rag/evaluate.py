@@ -21,6 +21,8 @@ THRESHOLDS = ROOT / "evals" / "thresholds.json"
 
 def load_testset(split: str = "all") -> list[dict]:
     items = [json.loads(l) for l in TESTSET.open(encoding="utf-8") if l.strip()]
+    if split == "devtest":                       # model / prompt selection: everything except the holdout
+        return [q for q in items if q["split"] in ("dev", "test")]
     return [q for q in items if split == "all" or q["split"] == split]
 
 

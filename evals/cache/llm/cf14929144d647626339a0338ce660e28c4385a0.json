@@ -1,0 +1,24 @@
+{
+ "text": "{\"claims\": [{\"claim\": \"Employee Handbook V1 передбачав 24 календарні дні щорічної оплачуваної відпустки для кожного працівника.\", \"supported\": true, \"citation_ok\": true}, {\"claim\": \"Версія Employee Handbook V1 від 2024-01-15 є нечинною та застарілою.\", \"supported\": true, \"citation_ok\": true}, {\"claim\": \"Хендбук вимагав, щоб принаймні одна частина відпустки тривала не менше 14 календарних днів.\", \"supported\": true, \"citation_ok\": true}, {\"claim\": \"У наданих джерелах немає чинної версії хендбука.\", \"supported\": true, \"citation_ok\": true}, {\"claim\": \"Хендбук застерігає: якщо його положення розходяться з Кодексом законів про працю України, застосовується Кодекс.\", \"supported\": true, \"citation_ok\": true}]}",
+ "model": "anthropic/claude-sonnet-5.5",
+ "input_tokens": 1049,
+ "output_tokens": 304,
+ "latency_s": 2.08,
+ "finish_reason": "stop",
+ "request": {
+  "model": "anthropic/claude-sonnet-5.5",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Ти перевіряєш, чи відповідь HR-асистента спирається на надані джерела (faithfulness), а не на зовнішні знання чи вигадки.\n\nРозбий відповідь на окремі фактичні твердження (не більше 8). Для кожного визнач:\n- supported: чи випливає твердження з тексту джерел (будь-якого з наданих);\n- citation_ok: чи підтверджує його саме те джерело, на яке посилається відповідь у квадратних дужках (false, якщо посилання немає або воно веде не туди).\n\nНе вважай твердженнями фрази на кшталт «згідно з документами» чи «зверніться до HR». Якщо відповідь — лише «не знаю», поверни порожній список.\n\nПоверни лише JSON: {\"claims\": [{\"claim\": \"...\", \"supported\": true | false, \"citation_ok\": true | false}]}"
+   },
+   {
+    "role": "user",
+    "content": "Джерела:\n\n[1] Employee Handbook V1 — 4. Annual leave (версія 2024-01-15, НЕЧИННА, застаріла версія)\nEvery employee is entitled to annual paid leave of 24 calendar days. Leave is planned in the leave schedule, which each department submits to HR by 15 December for the next year. At least one part of the leave must last no less than 14 calendar days.\n\nUnused leave is not paid out while the employee keeps working, except in the cases allowed by the Law of Ukraine On Leave. On dismissal, all unused days are compensated.\n\n[2] Employee Handbook V1 — 5. Remote work (версія 2024-01-15, НЕЧИННА, застаріла версія)\nAfter probation, employees may work remotely up to two days per week. Remote days are agreed with the team lead in the HR portal at least one working day in advance. Warehouse and office-administration roles work on site.\n\nFor a home workplace, the company pays a one-time allowance of 3,000 UAH for a chair, monitor or headset, against receipts.\n\n[3] Employee Handbook V1 — 1. About this handbook (версія 2024-01-15, НЕЧИННА, застаріла версія)\nEffective 2024-01-15.\n\nFictional company. Course project document, not legal advice.\n\n## 1. About this handbook\n\nThis handbook explains the main rules of working at Polaris Demo LLC: working time, leave, remote work, equipment and conduct. Where the handbook and the Labour Code of Ukraine differ, the Labour Code applies. Questions go to the HR team at hr@polaris-demo.example.\n\nВідповідь асистента:\nСтарий Employee Handbook V1 передбачав 24 календарні дні щорічної оплачуваної відпустки для кожного працівника [1]. Ця версія (від 2024-01-15) нечинна й застаріла [1]. Також вона вимагала, щоб принаймні одна частина відпустки тривала не менше 14 календарних днів [1].\n\nЧинної версії хендбука в наданих джерелах немає, тому порівняти з нею я не можу. Водночас хендбук застерігає: якщо його положення розходяться з Кодексом законів про працю України, застосовується Кодекс [3]."
+   }
+  ],
+  "temperature": 0.0,
+  "max_tokens": 900,
+  "json_mode": true
+ }
+}

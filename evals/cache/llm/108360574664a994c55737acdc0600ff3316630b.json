@@ -1,0 +1,25 @@
+{
+ "text": "{\"reason\": \"Відповідь називає 28 календарних днів, що збігається з еталоном, і правильно пояснює, що Tech Lead має грейд G4, а грейди G3 і G4 отримують 28 днів. Суперечностей з еталоном немає, а згадка про законодавчий мінімум є додатковою деталлю.\", \"pass\": true}",
+ "model": "anthropic/claude-sonnet-5.5",
+ "input_tokens": 650,
+ "output_tokens": 122,
+ "latency_s": 1.42,
+ "finish_reason": "stop",
+ "retried_empty": false,
+ "request": {
+  "model": "anthropic/claude-sonnet-5.5",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Ти — суворий оцінювач відповідей HR-асистента. Порівняй відповідь системи з еталонною відповіддю на те саме питання.\n\nВідповідь проходить (pass = true), якщо:\n- вона містить головний факт еталона (число, строк, так/ні, хто погоджує тощо);\n- у ній немає фактів, що суперечать еталону;\n- якщо еталон каже, що передумова питання хибна або застаріла, відповідь це виправляє, а не погоджується з передумовою.\n\nНе впливає на оцінку:\n- мова відповіді, стиль, порядок, посилання у квадратних дужках;\n- додаткові правильні подробиці, яких немає в еталоні;\n- відсутність другорядних деталей еталона (винятки, суміжні норми), якщо головний факт правильний.\n\nВідповідь не проходить (pass = false), якщо головний факт хибний або відсутній, якщо вона застаріла (наприклад, бере норму зі старої версії документа як чинну), або якщо система відповіла «не знаю», хоча еталон містить відповідь.\n\nПоверни лише JSON: {\"reason\": \"одне-два речення\", \"pass\": true | false}"
+   },
+   {
+    "role": "user",
+    "content": "Питання: How many days of annual leave does a Tech Lead get at the company?\n\nЕталонна відповідь: 28 calendar days: Tech Lead is grade G4, and grades G3 and G4 get 28 days (annual leave policy, section 1; staff schedule ENG-04).\n\nВідповідь системи: A Tech Lead gets 28 calendar days of annual leave [2][3]. The company's annual leave policy sets 28 calendar days for employees in grades G3 and G4, and the staffing table lists the Tech Lead position (ENG-04) at grade G4 with 28 days [2][3]. This exceeds the statutory minimum of at least 24 calendar days under Article 75 of the Labour Code [5][7]."
+   }
+  ],
+  "temperature": 0.0,
+  "max_tokens": 900,
+  "json_mode": true
+ }
+}

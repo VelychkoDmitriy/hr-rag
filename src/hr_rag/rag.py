@@ -33,8 +33,23 @@ PIPELINES = {
     # v4: + the best hit of each rewrite keeps a slot; the prompt makes the "не знаю" phrase a strict contract
     "v4": {"prompt": "answer_v4", "retrieve": 8, "budget": 2500, "min_score": None, "max_tokens": 1000,
            "rewrite": True, "route": True, "reasoning": False, "merge": "rerank_original", "reserve": 1},
+    # v5: premise check - the rewrite also extracts the user's assumptions and a neutral question without them;
+    # the neutral question is searched too (with a reserved slot), the assumptions go into the prompt to be checked
+    "v5": {"prompt": "answer_v5", "retrieve": 8, "budget": 2500, "min_score": None, "max_tokens": 1000,
+           "rewrite": True, "rewrite_prompt": "query_rewrite_v2", "route": True, "reasoning": False,
+           "merge": "rerank_original", "reserve": 1, "model": "deepseek/deepseek-v4.1-flash"},
+    # experiments: v4 with other generators (v4-<model>), see MODEL_CANDIDATES below
+    # experiment: v4 with a stronger generator (the rewrite stays on Haiku) - is the remaining error the model?
+    "v4-sonnet": {"prompt": "answer_v4", "retrieve": 8, "budget": 2500, "min_score": None, "max_tokens": 4000,
+                  "rewrite": True, "route": True, "reasoning": None, "merge": "rerank_original", "reserve": 1,
+                  "model": "anthropic/claude-sonnet-5.5"},
 }
-DEFAULT = "v4"
+# generator comparison on dev+test with the v4 prompt (REPORT.md, "Вибір моделі"); DeepSeek won and became default
+for _short, _model in {"gpt6luna": "openai/gpt-6-luna", "deepseek": "deepseek/deepseek-v4.1-flash",
+                       "mistral": "mistralai/mistral-large-4-0"}.items():
+    PIPELINES[f"v4-{_short}"] = {**PIPELINES["v4"], "model": _model}
+PIPELINES["v4-mistral"].update(reasoning=None, max_tokens=4000)    # rejects reasoning=false, reasons by default
+DEFAULT = "v5"
 
 UNKNOWN_RE = re.compile(r"^\W*(не знаю|i don'?t know)", re.I)
 CITE_RE = re.compile(r"\[(\d+(?:\s*[,;]\s*\d+)*)\]")
@@ -134,42 +149,54 @@ def route(question: str) -> list[str]:
                    for d in docs})
 
 
-def rewrite(question: str) -> tuple[list[str], llm.LLMResponse | None]:
-    system, user = load_prompt("query_rewrite_v1")
-    r = llm.complete([{"role": "system", "content": system}, {"role": "user", "content": user.format(question=question)}],
-                     llm.GENERATOR, temperature=0.0, max_tokens=200, json_mode=True, reasoning=False)
-    try:
-        m = re.search(r"\{.*\}", r.text, re.S)
-        queries = [q for q in json.loads(m.group(0))["queries"] if isinstance(q, str) and q.strip()][:2]
-    except (AttributeError, KeyError, json.JSONDecodeError):
-        queries = []
+def rewrite(question: str, prompt: str = "query_rewrite_v1") -> tuple[list[str], llm.LLMResponse | None]:
+    queries, _, r = rewrite_full(question, prompt)
     return queries, r
 
 
-def retrieve(question: str, cfg: dict, filters: dict | None) -> tuple[list[Hit], list[str], llm.LLMResponse | None, dict | None]:
+def rewrite_full(question: str, prompt: str = "query_rewrite_v1") -> tuple[list[str], list[str], llm.LLMResponse | None]:
+    """-> (search queries, user's assumptions, response). query_rewrite_v2 adds assumptions + a neutral question."""
+    system, user = load_prompt(prompt)
+    r = llm.complete([{"role": "system", "content": system}, {"role": "user", "content": user.format(question=question)}],
+                     llm.GENERATOR, temperature=0.0, max_tokens=200 if prompt == "query_rewrite_v1" else 400,
+                     json_mode=True, reasoning=False)
+    try:
+        d = json.loads(re.search(r"\{.*\}", r.text, re.S).group(0))
+        queries = [q for q in d.get("queries", []) if isinstance(q, str) and q.strip()][:2]
+        assumptions = [a for a in d.get("assumptions", []) if isinstance(a, str) and a.strip()][:3]
+        if isinstance(d.get("neutral"), str) and d["neutral"].strip():
+            queries.append(d["neutral"].strip())
+    except (AttributeError, KeyError, TypeError, json.JSONDecodeError):
+        queries, assumptions = [], []
+    return queries, assumptions, r
+
+
+def retrieve(question: str, cfg: dict, filters: dict | None):
+    """-> (hits, queries, rewrite response, effective filters, user's assumptions)"""
     queries, r = [question], None
     if cfg.get("route") and (docs := route(question)):
         filters = {**(filters or {}), "doc_id": docs}    # old versions stay filtered out unless OLD_RE matched
+    assumptions: list[str] = []
     if cfg.get("rewrite"):
-        extra, r = rewrite(question)
+        extra, assumptions, r = rewrite_full(question, cfg.get("rewrite_prompt", "query_rewrite_v1"))
         queries += [q for q in extra if q.casefold() != question.casefold()]
     if cfg.get("merge") == "rerank_original":
         hits = index().multi_query(question, queries[1:], cfg["retrieve"], filters, cfg.get("reserve", 0))
-        return hits, queries, r, filters
+        return hits, queries, r, filters, assumptions
     best: dict[str, Hit] = {}
     for q in queries:
         for h in index().search(q, "hybrid_rerank", cfg["retrieve"], filters):
             if h.chunk["chunk_id"] not in best or h.score > best[h.chunk["chunk_id"]].score:
                 best[h.chunk["chunk_id"]] = h
     hits = sorted(best.values(), key=lambda h: h.score, reverse=True)[:cfg["retrieve"]]
-    return [Hit(h.chunk, h.score, i) for i, h in enumerate(hits, 1)], queries, r, filters
+    return [Hit(h.chunk, h.score, i) for i, h in enumerate(hits, 1)], queries, r, filters, assumptions
 
 
 def answer(question: str, version: str = DEFAULT, filters: dict | None = "auto") -> Answer:
     cfg = PIPELINES[version]
     if filters == "auto":
         filters = None if OLD_RE.search(question) else {"is_current": True}
-    hits, queries, rw, filters = retrieve(question, cfg, filters)
+    hits, queries, rw, filters, assumptions = retrieve(question, cfg, filters)
     retrieved = [{"chunk_id": h.chunk["chunk_id"], "score": round(h.score, 4)} for h in hits]
     sources = pack(hits, cfg["budget"])
     rw_in, rw_out, rw_cost = (rw.input_tokens, rw.output_tokens, rw.cost) if rw else (0, 0, 0.0)
@@ -180,8 +207,10 @@ def answer(question: str, version: str = DEFAULT, filters: dict | None = "auto")
 
     system, user = load_prompt(cfg["prompt"])
     msgs = [{"role": "system", "content": system},
-            {"role": "user", "content": user.format(sources=format_sources(sources), question=question)}]
-    r = llm.complete(msgs, llm.GENERATOR, temperature=0.0, max_tokens=cfg["max_tokens"], reasoning=cfg["reasoning"])
+            {"role": "user", "content": user.format(sources=format_sources(sources), question=question,
+                                                     assumptions="; ".join(assumptions) or "немає")}]
+    r = llm.complete(msgs, cfg.get("model", llm.GENERATOR), temperature=0.0, max_tokens=cfg["max_tokens"],
+                     reasoning=cfg["reasoning"])
     nums = citations(r.text)
     return Answer(question, r.text.strip(), bool(UNKNOWN_RE.match(r.text)), sources,
                   sorted({n for n in nums if 1 <= n <= len(sources)}),

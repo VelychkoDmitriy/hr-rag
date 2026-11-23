@@ -1,0 +1,24 @@
+{
+ "text": "{\"reason\": \"Відповідь правильно називає загальну заборону за ст. 40 КЗпП і виняток ліквідації, але не згадує воєнний стан і ст. 5 Закону № 2136-IX, яка дозволяє звільнення з датою першого робочого дня після лікарняного. Еталон вимагає обидві норми. Додатково вона плутано згадує пункти 5 і 13 ст. 40 як винятки.\", \"pass\": false}",
+ "model": "anthropic/claude-sonnet-5.5",
+ "input_tokens": 855,
+ "output_tokens": 157,
+ "latency_s": 2.04,
+ "finish_reason": "stop",
+ "request": {
+  "model": "anthropic/claude-sonnet-5.5",
+  "messages": [
+   {
+    "role": "system",
+    "content": "Ти — суворий оцінювач відповідей HR-асистента. Порівняй відповідь системи з еталонною відповіддю на те саме питання.\n\nВідповідь проходить (pass = true), якщо:\n- вона містить головний факт еталона (число, строк, так/ні, хто погоджує тощо);\n- у ній немає фактів, що суперечать еталону;\n- якщо еталон каже, що передумова питання хибна або застаріла, відповідь це виправляє, а не погоджується з передумовою.\n\nНе впливає на оцінку:\n- мова відповіді, стиль, порядок, посилання у квадратних дужках;\n- додаткові правильні подробиці, яких немає в еталоні;\n- відсутність другорядних деталей еталона (винятки, суміжні норми), якщо головний факт правильний.\n\nВідповідь не проходить (pass = false), якщо головний факт хибний або відсутній, якщо вона застаріла (наприклад, бере норму зі старої версії документа як чинну), або якщо система відповіла «не знаю», хоча еталон містить відповідь.\n\nПоверни лише JSON: {\"reason\": \"одне-два речення\", \"pass\": true | false}"
+   },
+   {
+    "role": "user",
+    "content": "Питання: Can an employer dismiss an employee while the employee is on sick leave?\n\nЕталонна відповідь: General rule — no: Article 40 of the Labour Code prohibits dismissal on the employer's initiative during temporary incapacity for work (except paragraph 5 of Article 40 and full liquidation). But during martial law Article 5 of Law No. 2136-IX allows it, with the dismissal date set to the first working day after the sick leave ends. A complete answer names both.\n\nВідповідь системи: Generally, an employer cannot dismiss an employee at the employer's initiative while the employee is on sick leave, unless specific statutory exceptions apply or the dismissal is initiated by the employee [1][2][4]. Dismissal at the initiative of the employer during a period of temporary disability is prohibited, except in the case of complete liquidation of the enterprise, institution, or organization, or under specific statutory grounds such as clauses 5 and 13 of Article 40 of the Labour Code of Ukraine [2][4]. Additionally, temporary absence from work due to illness or injury is not a valid ground for dismissal [7]. However, if the dismissal is at the employee's own initiative and the employee has not revoked their resignation application, the employer has the right to dismiss the employee during sick leave on the requested date or after the two-week notice period [1][3]."
+   }
+  ],
+  "temperature": 0.0,
+  "max_tokens": 900,
+  "json_mode": true
+ }
+}

@@ -5,7 +5,7 @@
     python main.py index                # embeddings (cached in data/index/)
     python main.py ask "питання"        # answer with citations
     python main.py eval-retrieval       # recall@k / MRR for 7 search configurations
-    python main.py eval --version v4    # end-to-end eval with deterministic scorers and LLM judges
+    python main.py eval --version v5    # end-to-end eval with deterministic scorers and LLM judges
 """
 import argparse
 import sys
@@ -30,7 +30,7 @@ def main() -> None:
     a.add_argument("--version", default=None, help="prompt/pipeline version (default: latest)")
     e = sub.add_parser("eval", help="end-to-end eval on evals/testset.jsonl")
     e.add_argument("--version", default=None)
-    e.add_argument("--split", default="all", choices=["dev", "test", "all"])
+    e.add_argument("--split", default="all", choices=["dev", "test", "devtest", "holdout", "all"])
     e.add_argument("--no-judge", action="store_true", help="deterministic scorers only")
     e.add_argument("--check", action="store_true", help="exit 1 if a metric is below evals/thresholds.json")
     sub.add_parser("label-sheet", help="write evals/human_labels.csv for manual labelling of answers")

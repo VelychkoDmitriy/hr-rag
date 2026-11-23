@@ -29,7 +29,7 @@ def answers() -> dict[str, dict]:
     return out
 
 
-LABEL_VERSIONS = ("v1", "v4")       # the first and the final prompt: weak and strong answers, both verdicts
+LABEL_VERSIONS = ("v1", "v5")       # the first and the final version: weak and strong answers, both verdicts
 
 
 def write_sheet() -> None:
