@@ -3,6 +3,7 @@
 *.docx binary
 *.npz binary
 # corpus and eval data, not code: keep them out of the GitHub language statistics
-data/** linguist-documentation
+data/** linguist-vendored
+*.html linguist-detectable=false
 evals/cache/** linguist-generated
 evals/results/** linguist-generated
